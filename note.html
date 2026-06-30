@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Note Thermal 58mm</title>
+
+<style>
+
+body{
+    margin:20px;
+    background:#ececec;
+    font-family:Arial,sans-serif;
+}
+
+.card{
+    max-width:450px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+
+h2{
+    margin-top:0;
+    text-align:center;
+}
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+
+textarea{
+    width:100%;
+    height:280px;
+    resize:vertical;
+    padding:10px;
+    font-family:monospace;
+    box-sizing:border-box;
+}
+
+button{
+
+    padding:10px 15px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#125aa0;
+}
+
+.emoji button{
+    background:#eee;
+    color:black;
+    font-size:22px;
+    padding:5px 8px;
+}
+
+.preview{
+    margin-top:20px;
+    border:1px dashed #999;
+    padding:10px;
+    background:#fafafa;
+    white-space:pre-wrap;
+}
+
+#printArea{
+    display:none;
+}
+
+@media print{
+
+body{
+    margin:0;
+    background:white;
+}
+
+.card{
+    display:none;
+}
+
+#printArea{
+    display:block;
+    width:58mm;
+    white-space:pre-wrap;
+    word-break:break-word;
+    padding:2mm;
+}
+
+@page{
+    size:58mm auto;
+    margin:2mm;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>📝 Tuliskan Note </h2>
+
+<div class="toolbar">
+
+<label>Ukuran Font</label>
+
+<select id="fontSize" onchange="updatePreview()">
+
+<option value="10">10 px</option>
+<option value="12" selected>12 px</option>
+<option value="14">14 px</option>
+<option value="16">16 px</option>
+<option value="18">18 px</option>
+<option value="20">20 px</option>
+<option value="24">24 px</option>
+<option value="26">26 px</option>
+<option value="28">28 px</option>
+<option value="30">30 px</option>
+
+</select>
+
+<button onclick="printNote()">🖨 Print</button>
+
+</div>
+
+<div class="emoji">
+
+<button onclick="addEmoji('😀')">😀</button>
+<button onclick="addEmoji('😂')">😂</button>
+<button onclick="addEmoji('😍')">😍</button>
+<button onclick="addEmoji('🥰')">🥰</button>
+<button onclick="addEmoji('👍')">👍</button>
+<button onclick="addEmoji('🙏')">🙏</button>
+<button onclick="addEmoji('❤️')">❤️</button>
+<button onclick="addEmoji('🎉')">🎉</button>
+<button onclick="addEmoji('🔥')">🔥</button>
+<button onclick="addEmoji('⭐')">⭐</button>
+
+</div>
+
+<br>
+
+<textarea id="note" onkeyup="updatePreview()" placeholder="Tulis catatan di sini..."></textarea>
+
+<div class="preview" id="preview"></div>
+
+</div>
+
+<div id="printArea"></div>
+
+<script>
+
+updatePreview();
+
+function addEmoji(emoji){
+
+let txt=document.getElementById("note");
+
+let start=txt.selectionStart;
+let end=txt.selectionEnd;
+
+txt.value=
+txt.value.substring(0,start)+
+emoji+
+txt.value.substring(end);
+
+txt.focus();
+
+txt.selectionStart=txt.selectionEnd=start+emoji.length;
+
+updatePreview();
+
+}
+
+function updatePreview(){
+
+let note=document.getElementById("note").value;
+
+document.getElementById("preview").innerHTML=note;
+
+}
+
+function printNote(){
+
+    let note = document.getElementById("note").value;
+    let size = document.getElementById("fontSize").value;
+
+    let printArea = document.getElementById("printArea");
+    printArea.style.fontSize = size + "px";
+    printArea.textContent = note;
+
+    window.print();
+}
+</script>
+
+</body>
+</html>
